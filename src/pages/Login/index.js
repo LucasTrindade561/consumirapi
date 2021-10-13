@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { Container } from '../../styles/GlobalStyles';
 import { Title, Paragrafo } from './styled';
+import * as exampleActions from '../../store/modules/example/action';
 
 // import axios from '../../services/axios';
 
@@ -13,9 +14,7 @@ export default function Login() {
     e.preventDefault();
 
     // Esses dispatchs são as action dentro do reduce. Pode ter diversas action por evento.
-    dispatch({
-      type: 'BOTAO_CLICADO',
-    });
+    dispatch(exampleActions.clicaBotao());
   }
 
   return (
