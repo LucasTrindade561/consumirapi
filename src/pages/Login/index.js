@@ -1,8 +1,23 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Container } from '../../styles/GlobalStyles';
 import { Title, Paragrafo } from './styled';
 
+// import axios from '../../services/axios';
+
 export default function Login() {
+  const dispatch = useDispatch();
+
+  function handleClick(e) {
+    e.preventDefault();
+
+    // Esses dispatchs são as action dentro do reduce. Pode ter diversas action por evento.
+    dispatch({
+      type: 'BOTAO_CLICADO',
+    });
+  }
+
   return (
     <Container>
       <Title isRed={true}>
@@ -14,7 +29,18 @@ export default function Login() {
       <Paragrafo>
         <p>Lorem ipsum dolor sit amet.</p>
       </Paragrafo>
-      <button type="button">Enviar</button>
+      <button type="button" onClick={handleClick}>
+        Enviar
+      </button>
     </Container>
   );
 }
+
+// React.useEffect(() => {
+//   async function getData() {
+//     const response = await axios.get('/alunos');
+//     const { data } = response;
+//     console.log(data);
+//   }
+//   getData();
+// }, []);
