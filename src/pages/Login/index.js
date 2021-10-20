@@ -1,45 +1,64 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { isEmail } from 'validator';
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'lodash';
 
 import { Container } from '../../styles/GlobalStyles';
-import { Title, Paragrafo } from './styled';
-import * as exampleActions from '../../store/modules/example/actions';
+import { Form } from './styled';
+import * as actions from '../../store/modules/auth/actions';
 
-// import axios from '../../services/axios';
+import Loading from '../../components/Loading';
 
-export default function Login() {
+export default function Login(props) {
   const dispatch = useDispatch();
 
-  function handleClick(e) {
+  const prevPath = get(props, 'location.state.prevPath', '/');
+
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Esses dispatchs são as action dentro do reduce. Pode ter diversas action por evento.
-    dispatch(exampleActions.clicaBotaoRequest());
-  }
+    let formErrors = false;
+    if (password.length < 6 || password.length > 50) {
+      formErrors = true;
+      toast.error('Senha inválida');
+    }
+    if (!isEmail(email)) {
+      formErrors = true;
+      toast.error('E-mail inválido');
+    }
+
+    if (formErrors) return;
+
+    dispatch(actions.loginRequest({ email, password, prevPath }));
+  };
 
   return (
     <Container>
-      <Title isRed={true}>
-        <h1>
-          Login
-          <small>Hello</small>
-        </h1>
-      </Title>
-      <Paragrafo>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </Paragrafo>
-      <button type="button" onClick={handleClick}>
-        Enviar
-      </button>
+      <Loading isLoading={isLoading} />
+
+      <h1>Faça seu Login</h1>
+
+      <Form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Seu e-mail"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Sua senha"
+        />
+        <button type="submit">Acessar</button>
+      </Form>
     </Container>
   );
 }
-
-// React.useEffect(() => {
-//   async function getData() {
-//     const response = await axios.get('/alunos');
-//     const { data } = response;
-//     console.log(data);
-//   }
-//   getData();
-// }, []);
