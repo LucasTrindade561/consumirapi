@@ -10,7 +10,7 @@ import { Title, Form } from './styled';
 import axios from '../../services/axios';
 import history from '../../services/history';
 import * as actions from '../../store/modules/auth/actions';
-
+// so para fazer o commit
 export default function Fotos({ match }) {
   const dispatch = useDispatch();
   const id = get(match, 'params.id', '');
